@@ -1,18 +1,28 @@
 package com.xing.timereporter.controller;
 
+import com.xing.timereporter.model.Employee;
+import com.xing.timereporter.repository.EmployeeRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.xing.timereporter.model.Employee;
+import java.util.List;
 
-import org.springframework.stereotype.Controller;
-
-@Controller(value="/api")
+@RestController
+@RequestMapping("/api")
 public class EmployeeController {
-	
-	@RequestMapping(method=RequestMethod.GET, value="/employees")
-	public Employee getAllEmployees() {
-		return new Employee();
-	}
+
+
+    private final EmployeeRepo employeeRepo;
+
+    public EmployeeController(@Autowired EmployeeRepo employeeRepo) {
+        this.employeeRepo = employeeRepo;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/employees")
+    public List<Employee> getAllEmployees() {
+        return employeeRepo.findAll();
+    }
 
 }
