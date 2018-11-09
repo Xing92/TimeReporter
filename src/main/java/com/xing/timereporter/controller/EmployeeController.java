@@ -25,4 +25,8 @@ public class EmployeeController {
         return employeeRepo.findAll();
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/employees/new")
+    public void putAllEmployees() {
+    	employeeRepo.save(new Employee());
+    }
 }
