@@ -1,6 +1,5 @@
 package com.xing.timereporter.model;
 
-import java.sql.Time;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -17,43 +16,24 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
-@Table(name = "employee")
+@Table(name = "project")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class Employee {
+public class Project {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
-	private String firstName;
-	private String lastName;
 	@Column(unique=true)
-	private String pesel;
+	private String name;
 	@OneToMany(targetEntity = Timesheet.class)
 	private List<Timesheet> timesheet;
 
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getPesel() {
-		return pesel;
-	}
-
-	public void setPesel(String pesel) {
-		this.pesel = pesel;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public List<Timesheet> getTimesheet() {
@@ -71,4 +51,5 @@ public class Employee {
 	public void addTimesheet(Timesheet timesheet) {
 		this.timesheet.add(timesheet);
 	}
+
 }

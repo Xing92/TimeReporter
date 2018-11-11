@@ -43,8 +43,9 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Employee> putAllEmployees(Employee employee) {
+	public ResponseEntity<Employee> addEmployee(Employee employee) {
 		Employee savedEmployee = employeeRepo.save(employee);
+		System.out.println(savedEmployee);
 		return new ResponseEntity<Employee>(savedEmployee, HttpStatus.OK);
 	}
 
