@@ -8,8 +8,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -23,6 +25,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/swagger-ui.html",
             "/webjars/**"};
 
+    @Autowired
     private final UserDetailsService userDetailsService;
 
     @Autowired
@@ -34,44 +37,41 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
+    
+    @Bean
+    public CustomBasicAuthenticationEntryPoint getBasicAuthEntryPoint(){
+        return new CustomBasicAuthenticationEntryPoint();
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+//    	auth.inMemoryAuthentication().passwordEncoder(org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance()).withUser("user1").password("secret1")
+//		.roles("USER").and().withUser("admin1").password("secret1")
+//		.roles("USER", "ADMIN");
+        auth.userDetailsService(userDetailsService).passwordEncoder(NoOpPasswordEncoder.getInstance());
+//        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+//        auth.inMemoryAuthentication().withUser("user1").password("secret1").roles("USER");
     }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+
         httpSecurity.authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/api/user/all").hasRole("USER")
-                .antMatchers("/api/user/all2").permitAll()
-                .antMatchers("/view/all").permitAll()
-                .antMatchers("/view/register").permitAll()
-//                .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/registration").permitAll()
-//                .antMatchers("/employees/panel").hasAnyRole("EMPLOYEE", "ADMIN")
-//                .antMatchers("/cars/**/books").hasAnyRole("USER", "ADMIN", "EMPLOYEE")
-//                .antMatchers("/cars/edit/**").hasRole("ADMIN")
-//                .antMatchers("/cars/**").permitAll()
-//                .antMatchers("/api/cars/**").permitAll()
                 .antMatchers(SWAGGER_WHITE_LIST).permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .csrf().disable()
-//                .formLogin()
-//                .loginPage("/login").failureUrl("/login?error=true")
-//                .defaultSuccessUrl("/cars")
-//                .usernameParameter("email")
-//                .passwordParameter("password")
-//                .and()
-//                .logout()
-//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                .logoutSuccessUrl("/")
-//                .and()
-                .exceptionHandling()
-                .accessDeniedPage("/access-denied");
+//                .antMatchers("/login").permitAll()
+                .antMatchers("/api/user/me").hasRole("USER")
+                .antMatchers("/**").permitAll()
+//                .antMatchers("/api/user/all2").hasRole("USER")
+//                .antMatchers("/api/user/all3").permitAll()
+//                .antMatchers("/view/all").permitAll()
+//                .antMatchers("/view/register").permitAll()
+//                .anyRequest().authenticated()
+                
+                .and().httpBasic().realmName("MY_TEST_REALM").authenticationEntryPoint(getBasicAuthEntryPoint())
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().csrf().disable();
+//                .headers()
+//                .frameOptions().disable();
     }
 
     @Override

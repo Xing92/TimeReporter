@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +44,16 @@ public class UserController {
 		return new ResponseEntity<Optional<User>>(user, HttpStatus.OK);
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "me")
+	public ResponseEntity<User> getUserMe() {
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		User user = userRepo.findByUsername(userName);
+		if (user == null) {
+			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<User>(user, HttpStatus.OK);
+	}
+	
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<User> addUser(User user) {
 		User savedUser = userRepo.save(user);

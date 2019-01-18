@@ -3,6 +3,8 @@ package com.xing.timereporter.controller.view;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +31,9 @@ public class SimpleController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "all")
 	public List<Employee> getEmployee() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepo.findByUsername(auth.getName());
+        System.out.println(auth.getName());
 		return employeeRepo.findAll();
 	}
 	
