@@ -47,13 +47,15 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET, value = "me")
 	public ResponseEntity<User> getUserMe() {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		System.out.println("name:" + userName);
 		User user = userRepo.findByUsername(userName);
+		System.out.println("user:" + user);
 		if (user == null) {
 			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<User> addUser(User user) {
 		User savedUser = userRepo.save(user);

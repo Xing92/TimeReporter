@@ -58,16 +58,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         httpSecurity.authorizeRequests()
                 .antMatchers(SWAGGER_WHITE_LIST).permitAll()
-//                .antMatchers("/login").permitAll()
-                .antMatchers("/api/user/me").hasRole("USER")
                 .antMatchers("/**").permitAll()
+                .antMatchers("/api/user/me").hasRole("USER")
+//                .antMatchers("/login").permitAll()
 //                .antMatchers("/api/user/all2").hasRole("USER")
 //                .antMatchers("/api/user/all3").permitAll()
 //                .antMatchers("/view/all").permitAll()
 //                .antMatchers("/view/register").permitAll()
 //                .anyRequest().authenticated()
                 
-                .and().httpBasic().realmName("MY_TEST_REALM").authenticationEntryPoint(getBasicAuthEntryPoint())
+                .and().httpBasic()/*.realmName("MY_TEST_REALM")*/.authenticationEntryPoint(getBasicAuthEntryPoint())
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().csrf().disable();
 //                .headers()
