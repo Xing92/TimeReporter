@@ -18,6 +18,8 @@ public class TimeReporterApplication {
 		SpringApplication.run(TimeReporterApplication.class, args);
 	}
 
+	// Swagger:
+	// http://localhost:8080/swagger-ui.html
 	@Bean
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())

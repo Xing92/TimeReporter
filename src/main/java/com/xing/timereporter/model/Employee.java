@@ -1,6 +1,5 @@
 package com.xing.timereporter.model;
 
-import java.sql.Time;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -9,9 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.hibernate.validator.constraints.UniqueElements;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -27,10 +25,12 @@ public class Employee {
 
 	private String firstName;
 	private String lastName;
-	@Column(unique=true)
+	@Column(unique = true)
 	private String pesel;
 	@OneToMany(targetEntity = Timesheet.class)
 	private List<Timesheet> timesheet;
+	@OneToOne(targetEntity = User.class)
+	private User user;
 
 	public String getFirstName() {
 		return firstName;
@@ -62,6 +62,14 @@ public class Employee {
 
 	public void setTimesheet(List<Timesheet> timesheet) {
 		this.timesheet = timesheet;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Long getId() {
