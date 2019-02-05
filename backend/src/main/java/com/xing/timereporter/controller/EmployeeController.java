@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xing.timereporter.model.Employee;
@@ -60,11 +61,13 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Employee> addEmployee(Employee employee) {
-		String username = employee.getUser().getUsername();
-		User user = userRepo.findByUsername(username);
-		employee.setUser(user);
-		user.setEmployee(employee);
+	public ResponseEntity<Employee> addEmployee(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
+			@RequestParam("pesel") String pesel) {
+		Employee employee = new Employee();
+		employee.setFirstName(firstName);
+		employee.setLastName(lastName);
+		employee.setPesel(pesel);
+		employee.setId(1L);
 		Employee savedEmployee = employeeRepo.save(employee);
 		System.out.println(savedEmployee);
 		return new ResponseEntity<Employee>(savedEmployee, HttpStatus.OK);

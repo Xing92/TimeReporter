@@ -7,5 +7,5 @@ import com.xing.timereporter.model.Employee;
 
 @Repository
 public interface EmployeeRepo extends JpaRepository<Employee, Long> {
-
+	
 }
