@@ -2,11 +2,13 @@ package com.xing.timereporter.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -61,13 +63,15 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
+	@CrossOrigin
 	public ResponseEntity<Employee> addEmployee(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
 			@RequestParam("pesel") String pesel) {
+		long generatedLong = new Random().nextLong();
 		Employee employee = new Employee();
 		employee.setFirstName(firstName);
 		employee.setLastName(lastName);
 		employee.setPesel(pesel);
-		employee.setId(1L);
+		employee.setId(generatedLong);
 		Employee savedEmployee = employeeRepo.save(employee);
 		System.out.println(savedEmployee);
 		return new ResponseEntity<Employee>(savedEmployee, HttpStatus.OK);

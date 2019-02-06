@@ -1,21 +1,19 @@
 <h1>Employees</h1>
 
-<form>
   <div class="form-group">
     <label for="firstName">First Name</label>
-    <input type="text" class="form-control" id="firstName" required>
+    <input type="text" class="form-control" id="firstName" [formControl]="firstName" required>
   </div>
 
   <div class="form-group">
     <label for="lastName">Last Name</label>
-    <input type="text" class="form-control" id="lastName">
+    <input type="text" class="form-control" id="lastName" [formControl]="lastName">
   </div>
 
    <div class="form-group">
     <label for="pesel">PESEL</label>
-    <input type="text" class="form-control" id="pesel">
+    <input type="text" class="form-control" id="pesel" [formControl]="pesel">
   </div>
 
-  <button type="submit" class="btn btn-success">SEND</button>
+  <button type="submit" class="btn btn-success" (click)="saveEmployee()">SEND</button>
 
-</form>
