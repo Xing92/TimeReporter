@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.xing.timereporter.model.Role;
 import com.xing.timereporter.model.User;
 import com.xing.timereporter.repository.UserRepo;
 
@@ -71,6 +72,9 @@ public class UserController {
 		user.setUsername(username);
 		user.setPassword(password);
 		user.setEmail(email);
+		Role role = new Role();
+		role.setRole("USER");
+		user.addRole(role);
 		User savedUser = userRepo.save(user);
 		System.out.println(savedUser);
 		return new ResponseEntity<User>(savedUser, HttpStatus.OK);

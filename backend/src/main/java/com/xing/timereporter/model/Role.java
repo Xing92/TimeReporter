@@ -11,6 +11,16 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "ROLES")
 public class Role implements Serializable {
+	
+	enum Roles{
+		USER("USER"),
+		ADMIN("ADMIN");
+		
+		String name;
+		private Roles(String name) {
+			this.name= name;
+		}
+	}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -24,6 +24,12 @@ public class AppStart {
 	String password = "testpass2";
 	String method = "met";
 	String request = "req";
+	String firstName;
+	String lastName;
+	String pesel;
+	String startTime;
+	String endTime;
+	String projectName;
 
 	public static void main(String... args) {
 		AppStart appStart = new AppStart();
@@ -34,16 +40,18 @@ public class AppStart {
 		System.out.println("Started");
 		readParameters(args);
 		
-		printMyUser();
-		printMyEmployee();
-		
+//		printMyUser();
+//		printMyEmployee();
+//		createUser();
+//		createEmployee();
+		createTimesheet();
 	}
 	
-	private void createUser() {
-		String urlAddress = "http://localhost:8080/api/user/me";
-		
-		
-	}
+//	private void createUser() {
+//		String urlAddress = "http://localhost:8080/api/user/me";
+//		
+//		
+//	}
 
 	private void printMyUser() {
 		String urlAddress = "http://localhost:8080/api/user/me";
@@ -65,13 +73,40 @@ public class AppStart {
 		System.out.println(String.format("User with username: %s has firstName: %s and lastName: %s", username, firstname, lastname));
 	}
 	
-	private void createUser(String... args) {
-		String urlAddress = "http://localhost:8080/api/user";
+	private void createUser() {
+		String urlAddress = "http://localhost:8080/api/user/simple";
 		String method = "POST";
 		
 		
 		String response = "noResponse";
 		try {
+			urlAddress+=String.format("?%s=%s&%s=%s&%s=%s", "username", username, "password", password, "email", "noset");
+			URL url = new URL(urlAddress);
+//			String encoding = Base64.getEncoder().encodeToString((username + ":" + password).getBytes("UTF-8"));
+
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod(method);
+			connection.setDoOutput(true);
+//			connection.setRequestProperty("Authorization", "Basic " + encoding);
+			InputStream content = (InputStream) connection.getInputStream();
+			BufferedReader in = new BufferedReader(new InputStreamReader(content));
+			String line;
+			while ((line = in.readLine()) != null) {
+				response = line;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void createEmployee() {
+		String urlAddress = "http://localhost:8080/api/employee/simple";
+		String method = "POST";
+		
+		
+		String response = "noResponse";
+		try {
+			urlAddress+=String.format("?%s=%s&%s=%s&%s=%s", "firstName", firstName, "lastName", lastName, "pesel", pesel);
 			URL url = new URL(urlAddress);
 			String encoding = Base64.getEncoder().encodeToString((username + ":" + password).getBytes("UTF-8"));
 
@@ -89,7 +124,33 @@ public class AppStart {
 			e.printStackTrace();
 		}
 	}
+	
+	private void createTimesheet() {
+		String urlAddress = "http://localhost:8080/api/timesheet/simple";
+		String method = "POST";
+		
+		
+		String response = "noResponse";
+		try {
+			urlAddress+=String.format("?%s=%s&%s=%s&%s=%s", "startTime", startTime, "endTime", endTime, "projectName", projectName);
+			URL url = new URL(urlAddress);
+			String encoding = Base64.getEncoder().encodeToString((username + ":" + password).getBytes("UTF-8"));
 
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod(method);
+			connection.setDoOutput(true);
+			connection.setRequestProperty("Authorization", "Basic " + encoding);
+			InputStream content = (InputStream) connection.getInputStream();
+			BufferedReader in = new BufferedReader(new InputStreamReader(content));
+			String line;
+			while ((line = in.readLine()) != null) {
+				response = line;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private String sendRequest(String urlAddress, String method) {
 		String response = "noResponse";
 		try {
@@ -121,6 +182,12 @@ public class AppStart {
 		password = parameters.get("-p");
 		method = parameters.get("-method");
 		request = parameters.get("-req");
+		firstName = parameters.get("-fn");
+		lastName = parameters.get("-ln");
+		pesel = parameters.get("-pesel");
+		startTime = parameters.get("-start");
+		endTime = parameters.get("-end");
+		projectName = parameters.get("-project");
 		System.out.println("Finished reading parameters");
 	}
 

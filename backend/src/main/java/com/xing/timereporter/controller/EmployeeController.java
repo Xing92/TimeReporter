@@ -75,8 +75,9 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "simple")
-	public ResponseEntity<Employee> addSimpleEmployee(@RequestParam String username, @RequestParam String firstName,
+	public ResponseEntity<Employee> addSimpleEmployee(@RequestParam String firstName,
 			@RequestParam String lastName, @RequestParam String pesel) {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userRepo.findByUsername(username);
 		Employee employee = new Employee();
 		employee.setFirstName(firstName);

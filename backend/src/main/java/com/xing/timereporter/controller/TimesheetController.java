@@ -74,12 +74,12 @@ public class TimesheetController {
 	@RequestMapping(method = RequestMethod.POST, value = "simple")
 //	public ResponseEntity<Timesheet> addSimpleTimesheet(@RequestParam LocalDateTime timeStart, @RequestParam LocalDateTime timeEnd) {
 	public ResponseEntity<Timesheet> addSimpleTimesheet(@RequestParam String startTime,
-			@RequestParam String endTime) {
+			@RequestParam String endTime, @RequestParam String projectName) {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userRepo.findByUsername(userName);
 		Employee employee = user.getEmployee();
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm");
 		LocalDateTime timeStart = LocalDateTime.parse(startTime, formatter);
 		LocalDateTime timeEnd = LocalDateTime.parse(endTime, formatter);
 		
@@ -87,8 +87,13 @@ public class TimesheetController {
 		timesheet.setTimeStart(timeStart);
 		timesheet.setTimeEnd(timeEnd);
 		timesheet.setEmployee(employee);
+
+		Project project = projectRepo.findByName(projectName);
+		if(project == null) {
+			project = new Project();
+			project.setName(projectName);
+		}
 		
-		Project project = new Project();
 		project.addTimesheet(timesheet);
 		timesheet.setProject(project);
 		employee.addTimesheet(timesheet);
