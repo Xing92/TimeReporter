@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xing.timereporter.model.User;
@@ -58,6 +59,18 @@ public class UserController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<User> addUser(User user) {
+		User savedUser = userRepo.save(user);
+		System.out.println(savedUser);
+		return new ResponseEntity<User>(savedUser, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "simple")
+	public ResponseEntity<User> addSimpleUser(@RequestParam("username") String username,
+			@RequestParam("password") String password, @RequestParam(name = "email", required = false) String email) {
+		User user = new User();
+		user.setUsername(username);
+		user.setPassword(password);
+		user.setEmail(email);
 		User savedUser = userRepo.save(user);
 		System.out.println(savedUser);
 		return new ResponseEntity<User>(savedUser, HttpStatus.OK);

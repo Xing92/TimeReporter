@@ -2,6 +2,7 @@ package com.xing.timereporter.model;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,13 +21,13 @@ public class Timesheet {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private Long id_employee;
-	private Long id_project;
+//	private Long id_employee;
+//	private Long id_project;
 //	@NotNull
-	@ManyToOne(targetEntity = Employee.class)
+	@ManyToOne(targetEntity = Employee.class, cascade=CascadeType.ALL)
 	private Employee employee;
 //	@NotNull
-	@ManyToOne(targetEntity = Project.class)
+	@ManyToOne(targetEntity = Project.class, cascade=CascadeType.ALL)
 	private Project project;
 //	@NotNull
 	private LocalDateTime timeStart = LocalDateTime.now();
@@ -65,21 +66,21 @@ public class Timesheet {
 		this.timeEnd = timeEnd;
 	}
 
-	public Long getId_employee() {
-		return id_employee;
-	}
-
-	public void setId_employee(Long id_employee) {
-		this.id_employee = id_employee;
-	}
-
-	public Long getId_project() {
-		return id_project;
-	}
-
-	public void setId_project(Long id_project) {
-		this.id_project = id_project;
-	}
+//	public Long getId_employee() {
+//		return id_employee;
+//	}
+//
+//	public void setId_employee(Long id_employee) {
+//		this.id_employee = id_employee;
+//	}
+//
+//	public Long getId_project() {
+//		return id_project;
+//	}
+//
+//	public void setId_project(Long id_project) {
+//		this.id_project = id_project;
+//	}
 
 	public Long getId() {
 		return id;

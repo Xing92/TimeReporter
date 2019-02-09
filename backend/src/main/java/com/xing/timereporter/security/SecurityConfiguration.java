@@ -60,6 +60,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(SWAGGER_WHITE_LIST).permitAll()
                 .antMatchers("/**").permitAll()
                 .antMatchers("/api/user/me").hasRole("USER")
+                .antMatchers("/api/employee/simple").hasRole("USER")
 //                .antMatchers("/login").permitAll()
 //                .antMatchers("/api/user/all2").hasRole("USER")
 //                .antMatchers("/api/user/all3").permitAll()

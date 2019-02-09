@@ -1,7 +1,9 @@
 package com.xing.timereporter.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,8 +25,8 @@ public class Project {
 	private Long id;
 	@Column(unique=true)
 	private String name;
-	@OneToMany(targetEntity = Timesheet.class)
-	private List<Timesheet> timesheet;
+	@OneToMany(targetEntity = Timesheet.class, cascade=CascadeType.ALL)
+	private List<Timesheet> timesheet = new ArrayList();
 
 	public String getName() {
 		return name;

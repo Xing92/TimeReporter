@@ -21,10 +21,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) {
-		System.out.println("XING:finding:username: " + username);
+		System.out.println("XING:finding:username:" + username + ":");
 		User user = userRepo.findByUsername(username);
-		System.out.println("XING:finding:user: " + user);
-		System.out.println("XING:finding:id: " + user.getId());
+		System.out.println("XING:finding:id:" + user.getId() + ":");
 		return new UserPrincipal(user);
 	}
 }

@@ -2,6 +2,7 @@ package com.xing.timereporter.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,7 +28,7 @@ public class Employee {
 	private String lastName;
 	@Column(unique = true)
 	private String pesel;
-	@OneToMany(targetEntity = Timesheet.class)
+	@OneToMany(targetEntity = Timesheet.class, cascade=CascadeType.ALL)
 	private List<Timesheet> timesheet;
 	@OneToOne(targetEntity = User.class)
 	private User user;

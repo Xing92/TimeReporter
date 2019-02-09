@@ -3,13 +3,17 @@ package com.xing.timereporter.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.security.RolesAllowed;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xing.timereporter.model.Employee;
@@ -38,7 +42,7 @@ public class EmployeeController {
 		return new ResponseEntity<List<Employee>>(employees, HttpStatus.OK);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value="{id}")
+	@RequestMapping(method = RequestMethod.GET, value = "{id}")
 	public ResponseEntity<Optional<Employee>> getEmployeeById(@PathVariable("id") Long id) {
 		Optional<Employee> employee = employeeRepo.findById(id);
 		if (employee == null) {
@@ -46,7 +50,7 @@ public class EmployeeController {
 		}
 		return new ResponseEntity<Optional<Employee>>(employee, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "me")
 	public ResponseEntity<Employee> getEmployeeMe() {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -70,7 +74,23 @@ public class EmployeeController {
 		return new ResponseEntity<Employee>(savedEmployee, HttpStatus.OK);
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value="{id}")
+	@RequestMapping(method = RequestMethod.POST, value = "simple")
+	public ResponseEntity<Employee> addSimpleEmployee(@RequestParam String username, @RequestParam String firstName,
+			@RequestParam String lastName, @RequestParam String pesel) {
+		User user = userRepo.findByUsername(username);
+		Employee employee = new Employee();
+		employee.setFirstName(firstName);
+		employee.setLastName(lastName);
+		employee.setPesel(pesel);
+		
+		employee.setUser(user);
+		user.setEmployee(employee);
+		Employee savedEmployee = employeeRepo.save(employee);
+		System.out.println(savedEmployee);
+		return new ResponseEntity<Employee>(savedEmployee, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "{id}")
 	public ResponseEntity deleteEmployee(@PathVariable("id") Long id) {
 		if (employeeRepo.existsById(id)) {
 			employeeRepo.deleteById(id);
